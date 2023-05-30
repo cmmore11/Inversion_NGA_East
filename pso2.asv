@@ -1,0 +1,75 @@
+%
+%INPUTS:
+%
+%OUTPU
+%
+
+
+% Copyright (c) 2016, Yarpiz (www.yarpiz.com)
+% All rights reserved. Please read the "license.txt" for license terms.
+%
+% Project Code: YTEA101
+% Project Title: Particle Swarm Optimization Video Tutorial
+% Publisher: Yarpiz (www.yarpiz.com)
+% 
+% Developer and Instructor: S. Mostapha Kalami Heris (Member of Yarpiz Team)
+% 
+% Contact Info: sm.kalami@gmail.com, info@yarpiz.com
+%
+
+clc;
+clear;
+close all;
+
+%% Problem Definiton
+
+problem.CostFunction = @(x) vec_fit_alt(x);  % Cost Function
+problem.VarMin = [ 0.1,    0, -1.3*ones(1,8),    -1, 3.5,0.25]; % Lower Bound of Decision Variables
+problem.VarMax = [ 6.0, 3.00, -0.6*ones(1,8),   0.5, 7.5,0.8];   % Upper Bound of Decision Variables
+problem.nVar = length(problem.VarMin(1,:));      % Number of Unknown (Decision) Variables
+%% Parameters of PSO
+
+
+% Constriction Coefficients
+    popsss =120;
+
+    M = 0.675;
+    tp = pi*M;
+    damp = sqrt((log(M)^2)/((log(M)^2)+(pi^2)));
+    chi = exp((((log(M^2)))/tp));
+    term = (tan(((pi/tp)-pi))^2);
+    phi1 = -((chi+chi*term-2*sqrt(chi*(term+1))+term+1)/(-term-1));
+    phi2 = phi1;%-((chi+chi*term+2*sqrt(chi*(term+1))+term+1)/(-term-1));
+
+
+kappa = 1;
+% % phi1 = 2.05;
+% % phi2 = 2.05;
+% % phi = phi1 + phi2;
+% % chi = 2*kappa/abs(2-phi-sqrt(phi^2-4*phi));
+% 
+params.MaxIt = 300;        % Maximum Number of Iterations
+params.nPop = popsss;           % Population Size (Swarm Size)
+params.w = chi;             % Intertia Coefficient
+params.wdamp = damp;           % Damping Ratio of Inertia Coefficient
+params.c1 = phi1;       % CP, Personal Acceleration Coefficient
+params.c2 = phi2;       % CG, Social Acceleration Coefficient
+params.ShowIterInfo = true; % Flag for Showing Iteration Informatin
+
+%%%%OLD/ORIGINAL
+% % params.w = chi;             % Intertia Coefficient
+% % %params.wdamp = 1;           % Damping Ratio of Inertia Coefficient
+% % params.c1 = chi*phi1;       % CP, Personal Acceleration Coefficient
+% % params.c2 = chi*phi2;       % CG, Social Acceleration Coefficient
+% % params.ShowIterInfo = true;
+%% Calling PSO
+for i = 1:10
+dat = PSO(problem, params);
+filename = sprintf('Res_M4_i%d.mat',i+50);
+
+save(filename,'dat');
+%% Results
+end
+
+
+
